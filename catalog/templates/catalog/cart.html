@@ -1,0 +1,65 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">Корзина</h1>
+    <p class="lead">Проверьте количество товаров перед оформлением заказа.</p>
+
+    {% if cart_items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.price }} ₸</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.item_total }} ₸</td>
+                        <td>
+                            <div class="actions">
+                                <a class="btn btn-secondary" href="{% url 'catalog:cart_increase' item.product.id %}">+1</a>
+                                <a class="btn btn-secondary" href="{% url 'catalog:cart_decrease' item.product.id %}">-1</a>
+                                <a class="btn btn-danger" href="{% url 'catalog:cart_remove' item.product.id %}">Удалить</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="summary">
+            <div class="card">
+                <strong>Позиции</strong>
+                <div>{{ cart_total_positions }}</div>
+            </div>
+            <div class="card">
+                <strong>Товаров всего</strong>
+                <div>{{ cart_total_quantity }}</div>
+            </div>
+            <div class="card">
+                <strong>Итоговая сумма</strong>
+                <div>{{ cart_total_sum }} ₸</div>
+            </div>
+        </div>
+
+        <div class="actions" style="margin-top: 20px;">
+            <a class="btn btn-primary" href="{% url 'orders:checkout' %}">Перейти к оформлению</a>
+            <a class="btn btn-secondary" href="{% url 'catalog:product_list' %}">Вернуться в каталог</a>
+        </div>
+    {% else %}
+        <div class="card empty-state">
+            <h2>Корзина пуста</h2>
+            <p class="muted">Добавьте товары из каталога, чтобы перейти к оформлению заказа.</p>
+            <a class="btn btn-primary" href="{% url 'catalog:product_list' %}">Перейти в каталог</a>
+        </div>
+    {% endif %}
+{% endblock %}

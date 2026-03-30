@@ -1,0 +1,27 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+    <div class="card form-card">
+        <h1 class="page-title">Вход</h1>
+        <p class="lead">Войдите, чтобы видеть свои заказы и быстрее оформлять покупки.</p>
+        <form method="post" class="form-grid">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+            {% if form.non_field_errors %}
+                {{ form.non_field_errors }}
+            {% endif %}
+            <div class="actions">
+                <button class="btn btn-primary" type="submit">Войти</button>
+                <a class="btn btn-secondary" href="{% url 'accounts:register' %}">Регистрация</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

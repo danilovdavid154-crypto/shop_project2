@@ -1,0 +1,31 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Мои заказы{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">Мои заказы</h1>
+    <p class="lead">Здесь отображаются все заказы, оформленные из вашего аккаунта.</p>
+
+    {% if orders %}
+        <div class="stack">
+            {% for order in orders %}
+                <div class="card order-card">
+                    <div class="actions" style="justify-content: space-between;">
+                        <strong>Заказ №{{ order.id }}</strong>
+                        <span class="pill">{{ order.get_status_display }}</span>
+                    </div>
+                    <div class="muted">Дата: {{ order.created_at|date:"d.m.Y H:i" }}</div>
+                    <div class="muted">Получатель: {{ order.full_name }}</div>
+                    <div class="muted">Телефон: {{ order.phone }}</div>
+                    <div><strong>Сумма:</strong> {{ order.total_amount }} ₸</div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card empty-state">
+            <h2>У вас пока нет заказов</h2>
+            <p class="muted">Как только оформите первый заказ, он появится на этой странице.</p>
+            <a class="btn btn-primary" href="{% url 'catalog:product_list' %}">Перейти в каталог</a>
+        </div>
+    {% endif %}
+{% endblock %}

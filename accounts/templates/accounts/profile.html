@@ -1,0 +1,36 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+    <div class="stack">
+        <div>
+            <h1 class="page-title">Мини-профиль</h1>
+            <p class="lead">Здесь можно посмотреть логин и обновить email.</p>
+        </div>
+
+        <div class="card form-card">
+            <div class="stack">
+                <div><strong>Username:</strong> {{ request.user.username }}</div>
+                <div><strong>Email:</strong> {{ request.user.email|default:"не указан" }}</div>
+            </div>
+        </div>
+
+        <div class="card form-card">
+            <h2>Редактировать email</h2>
+            <form method="post" class="form-grid">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                <div class="actions">
+                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

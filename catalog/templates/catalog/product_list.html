@@ -1,0 +1,39 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">Каталог товаров</h1>
+    <p class="lead">Подберите товары, добавьте их в корзину и оформите заказ в пару шагов.</p>
+
+    <div class="grid">
+        {% for product in products %}
+            <div class="card product-card">
+                {% with main_image=product.images.first %}
+                    {% if main_image %}
+                        <img class="product-image" src="{{ main_image.image.url }}" alt="{{ main_image.alt_text|default:product.name }}">
+                    {% endif %}
+                {% endwith %}
+                <h2 class="product-title">{{ product.name }}</h2>
+                <p class="muted">{{ product.category.name }}</p>
+                <p class="product-description">{{ product.description|default:"Описание отсутствует."|truncatechars:120 }}</p>
+                <div class="price">{{ product.price }} ₸</div>
+                <p class="muted">Остаток: {{ product.stock }}</p>
+
+                <div class="actions" style="margin-top: auto; padding-top: 14px;">
+                    <a class="btn btn-secondary" href="{% url 'catalog:product_detail' product.slug %}">Подробнее</a>
+                    {% if product.stock > 0 %}
+                        <a class="btn btn-primary" href="{% url 'catalog:cart_add' product.id %}">Добавить в корзину</a>
+                    {% else %}
+                        <span class="btn btn-secondary" aria-disabled="true">Нет в наличии</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="card empty-state">
+                <h2>Товаров пока нет</h2>
+                <p class="muted">Добавьте товары в админке или запустите команду наполнения демо-данными.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

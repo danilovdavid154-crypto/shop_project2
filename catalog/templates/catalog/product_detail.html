@@ -1,0 +1,27 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+    <div class="card">
+        {% with main_image=product.images.first %}
+            {% if main_image %}
+                <img class="product-image" src="{{ main_image.image.url }}" alt="{{ main_image.alt_text|default:product.name }}">
+            {% endif %}
+        {% endwith %}
+        <p class="muted">{{ product.category.name }}</p>
+        <h1 class="page-title">{{ product.name }}</h1>
+        <p>{{ product.description|default:"Описание отсутствует." }}</p>
+        <div class="price">{{ product.price }} ₸</div>
+        <p class="muted">Остаток: {{ product.stock }}</p>
+
+        <div class="actions">
+            {% if product.stock > 0 %}
+                <a class="btn btn-primary" href="{% url 'catalog:cart_add' product.id %}">Добавить в корзину</a>
+            {% else %}
+                <span class="btn btn-secondary" aria-disabled="true">Нет в наличии</span>
+            {% endif %}
+            <a class="btn btn-secondary" href="{% url 'catalog:product_list' %}">Назад в каталог</a>
+        </div>
+    </div>
+{% endblock %}

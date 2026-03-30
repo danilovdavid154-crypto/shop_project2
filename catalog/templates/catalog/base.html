@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Shop Project{% endblock %}</title>
+    <style>
+        :root {
+            --bg-top: #f4f7fb;
+            --bg-bottom: #fcf9f1;
+            --surface: rgba(255, 255, 255, 0.96);
+            --surface-border: #d8e1ef;
+            --text-main: #1f2a37;
+            --text-muted: #6b7280;
+            --accent: #0f766e;
+            --accent-dark: #115e59;
+            --accent-soft: #dff6f3;
+            --danger: #b42318;
+            --shadow: rgba(15, 118, 110, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(15, 118, 110, 0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(217, 119, 6, 0.10), transparent 28%),
+                linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 60%, #fff 100%);
+            color: var(--text-main);
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(216, 225, 239, 0.9);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-group,
+        .header-links,
+        .inline-form,
+        .account-block,
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent-dark);
+            text-decoration: none;
+        }
+
+        .nav-link,
+        .hello {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .hello {
+            color: var(--text-main);
+        }
+
+        .messages {
+            margin-bottom: 16px;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: var(--accent-soft);
+            color: var(--accent-dark);
+            border: 1px solid #bde8e3;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        .stack {
+            display: grid;
+            gap: 18px;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 22px;
+            padding: 18px;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 16px 40px var(--shadow);
+        }
+
+        .product-card {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+            border-radius: 18px;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #e6fffb 0%, #ffffff 100%);
+            border: 1px solid #d4efe9;
+        }
+
+        .product-title {
+            margin: 0 0 10px;
+            line-height: 1.15;
+            min-height: 2.4em;
+        }
+
+        .product-description {
+            min-height: 7.2em;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 8px 0;
+            color: var(--accent-dark);
+        }
+
+        .muted,
+        .lead {
+            color: var(--text-muted);
+        }
+
+        .lead {
+            margin: 0 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: var(--accent-soft);
+            color: var(--accent-dark);
+            border: 1px solid #bde8e3;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #d92d20 0%, #b42318 100%);
+            color: #fff;
+        }
+
+        .btn-link {
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: var(--accent);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn[aria-disabled="true"] {
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        .page-title {
+            margin: 0 0 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 16px 40px var(--shadow);
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid #edf2f7;
+            text-align: left;
+        }
+
+        .summary {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .summary .card {
+            padding: 16px;
+        }
+
+        .form-card {
+            max-width: 720px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .field label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font: inherit;
+            background: #fff;
+        }
+
+        .field .helptext {
+            display: block;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .errorlist {
+            color: var(--danger);
+            margin: 6px 0 0;
+            padding-left: 18px;
+        }
+
+        .order-card {
+            display: grid;
+            gap: 10px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #eef6ff;
+            color: #175cd3;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 28px;
+        }
+
+        @media (max-width: 720px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            th,
+            td {
+                display: block;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tr {
+                border-bottom: 1px solid #edf2f7;
+                padding: 12px 0;
+            }
+
+            td {
+                padding: 8px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-group">
+                <a class="brand" href="{% url 'catalog:product_list' %}">Shop Project</a>
+                <div class="header-links">
+                    <a class="nav-link" href="{% url 'catalog:product_list' %}">Главная / Каталог</a>
+                    <a class="nav-link" href="{% url 'catalog:cart_detail' %}">Корзина: {{ cart_total_positions }} поз. / {{ cart_total_quantity }} шт.</a>
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'orders:my_orders' %}">Мои заказы</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="account-block">
+                {% if user.is_authenticated %}
+                    <span class="hello">Привет, {{ user.username }}</span>
+                    <a class="nav-link" href="{% url 'accounts:profile' %}">Профиль</a>
+                    <form class="inline-form" method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn-link" type="submit">Выйти</button>
+                    </form>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    <a class="nav-link" href="{% url 'accounts:register' %}">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

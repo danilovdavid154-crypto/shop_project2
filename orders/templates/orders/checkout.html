@@ -1,0 +1,70 @@
+{% extends "catalog/base.html" %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+    <div class="stack">
+        <div>
+            <h1 class="page-title">Оформление заказа</h1>
+            <p class="lead">Заполните контактные данные. Если вы вошли в аккаунт, заказ автоматически привяжется к вашему профилю.</p>
+        </div>
+
+        <div class="card form-card">
+            <form method="post" class="form-grid">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <span class="helptext">{{ field.help_text }}</span>
+                        {% endif %}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                <div class="actions">
+                    <button class="btn btn-primary" type="submit">Подтвердить заказ</button>
+                    <a class="btn btn-secondary" href="{% url 'catalog:cart_detail' %}">Вернуться в корзину</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Ваш заказ</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.product.price }} ₸</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.item_total }} ₸</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="summary">
+                <div class="card">
+                    <strong>Позиций</strong>
+                    <div>{{ cart_total_positions }}</div>
+                </div>
+                <div class="card">
+                    <strong>Товаров</strong>
+                    <div>{{ cart_total_quantity }}</div>
+                </div>
+                <div class="card">
+                    <strong>Итого</strong>
+                    <div>{{ cart_total_sum }} ₸</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
